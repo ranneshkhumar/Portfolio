@@ -6,6 +6,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { cn } from '../../utils/cn';
 import { slideIn } from '../../utils/animations';
+import emailjs from "@emailjs/browser";
 
 export const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,17 +19,51 @@ export const Contact = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
+const onSubmit = async (data) => {
+  try {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
+
+    // Email to you
+    await emailjs.send(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      {
+        from_name: data.name,
+        from_email: data.email,
+        phone: data.phone || "Not provided",
+        subject: data.subject,
+        message: data.message,
+      },
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+    console.log(import.meta.env.VITE_EMAILJS_SERVICE_ID);
+  console.log(import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
+  console.log(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+    // Auto reply to sender
+    await emailjs.send(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_AUTOREPLY_ID,
+      {
+        from_name: data.name,
+        from_email: data.email,
+      },
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+
     setIsSuccess(true);
     reset();
-    
-    // Reset success state after 3s
-    setTimeout(() => setIsSuccess(false), 3000);
-  };
+
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 3000);
+
+  } catch (error) {
+    console.error("EmailJS Error:", error);
+    alert("Failed to send message. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const shakeAnimation = {
     shake: {
@@ -128,6 +163,35 @@ export const Contact = () => {
                   />
                   {errors.email && <span className="text-red-500 text-xs mt-1 block">{errors.email.message}</span>}
                 </motion.div>
+                <motion.div>
+  <label htmlFor="phone" className="block text-sm font-sans font-bold mb-2">
+    Contact Number <span className="text-secondary">(Optional)</span>
+  </label>
+
+  <input
+    id="phone"
+    type="tel"
+    {...register("phone", {
+      pattern: {
+        value: /^[0-9+\-\s()]{7,20}$/,
+        message: "Invalid phone number",
+      },
+    })}
+    className={cn(
+      "w-full bg-background border rounded-lg px-4 py-3 font-sans focus:outline-none focus:ring-2 transition-all",
+      errors.phone
+        ? "border-red-500 focus:ring-red-500/50"
+        : "border-border focus:border-primary focus:ring-primary/50"
+    )}
+    placeholder="+91 98765 43210"
+  />
+
+  {errors.phone && (
+    <span className="text-red-500 text-xs mt-1 block">
+      {errors.phone.message}
+    </span>
+  )}
+</motion.div>
 
                 <motion.div variants={shakeAnimation} animate={errors.subject ? "shake" : ""}>
                   <label htmlFor="subject" className="block text-sm font-sans font-bold mb-2">Subject</label>
@@ -141,9 +205,11 @@ export const Contact = () => {
                       )}
                     >
                       <option value="">Select a subject...</option>
-                      <option value="freelance">Freelance Project</option>
-                      <option value="employment">Full-time Opportunity</option>
-                      <option value="networking">Networking / Chat</option>
+                      <option value="Freelance Project">Freelance Project</option>
+                      <option value="Full-time Opportunity">Full-time Opportunity</option>
+                      <option value="Networking / Chat">Networking / Chat</option>
+
+                      
                     </select>
                   </div>
                   {errors.subject && <span className="text-red-500 text-xs mt-1 block">{errors.subject.message}</span>}
