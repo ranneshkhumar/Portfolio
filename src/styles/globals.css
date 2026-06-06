@@ -122,14 +122,8 @@
 
 /* Custom Cursor Effects */
 @media (pointer: fine) {
-  body,
-  a,
-  button,
-  [role="button"],
-  input,
-  textarea,
-  select {
-    cursor: auto;
+  body, a, button, [role="button"], input, textarea, select {
+    cursor: none;
   }
 }
 
