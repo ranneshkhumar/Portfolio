@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { FiGithub, FiLinkedin, FiTwitter, FiSend, FiCheck, FiLoader } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiInstagram, FiSend, FiCheck, FiLoader } from 'react-icons/fi';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { cn } from '../../utils/cn';
@@ -69,9 +69,9 @@ export const Contact = () => {
 
             <div className="flex gap-6">
               {[
-                { icon: FiGithub, href: "https://github.com/rannesh" },
-                { icon: FiLinkedin, href: "https://linkedin.com/in/rannesh" },
-                { icon: FiTwitter, href: "https://twitter.com/rannesh" }
+                { icon: FiGithub, href: "https://github.com/ranneshkhumar" },
+              { icon: FiLinkedin, href: "https://www.linkedin.com/in/rannesh-khumar-b-r-507377289/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BzD0kZhMARVizQ2YE664gpw%3D%3D" },
+                { icon: FiInstagram, href: "https://www.instagram.com/rannesh_khumar?igsh=MWxnODU1bGM1dzVwZQ==" }
               ].map((social, idx) => (
                 <a 
                   key={idx}
