@@ -6,7 +6,6 @@ import { CurrentlyBuilding } from './components/sections/CurrentlyBuilding';
 import { Skills } from './components/sections/Skills';
 import { Projects } from './components/sections/Projects';
 import { Timeline } from './components/sections/Timeline';
-import { Certifications } from './components/sections/Certifications';
 import { Contact } from './components/sections/Contact';
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
         <Skills />
         <Projects />
         <Timeline />
-        <Certifications />
+        
         <Contact />
       </Layout>
     </ThemeProvider>
